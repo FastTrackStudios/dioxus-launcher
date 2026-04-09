@@ -1,0 +1,15 @@
+[package]
+name = "launcher-core"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+nucleo-matcher = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+toml = { workspace = true }
+facet = { workspace = true }
+facet-styx = { workspace = true }
+chrono = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }

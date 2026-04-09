@@ -1,0 +1,23 @@
+pub mod config;
+pub mod export;
+pub mod favorites;
+pub mod filter;
+pub mod history;
+pub mod icons;
+pub mod matching;
+pub mod pack;
+pub mod provider;
+pub mod query;
+pub mod tags;
+pub mod userdata;
+
+pub use config::LauncherConfig;
+pub use export::ExportBundle;
+pub use favorites::Favorites;
+pub use filter::{FilterMode, FilterPresets, FilterState, MagicWords};
+pub use pack::{LoadedPack, PackDef};
+pub use provider::{ActionModifier, ActivationResult, Item, ItemAction, Provider, ProviderConfig};
+pub use query::{QueryEngine, QueryEngineBuilder};
+pub use tags::{Tag, TagInfo, TagRegistry, TagSet};
+pub use icons::IconResolver;
+pub use userdata::UserDataStore;

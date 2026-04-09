@@ -1,0 +1,80 @@
+/// Schema for Dioxus Launcher workflow packs.
+/// Packs register custom items, tags, icons, and workflows.
+
+meta {
+    id "https://github.com/FastTrackStudios/dioxus-launcher/pack"
+    version "1.0.0"
+    description "Workflow pack schema for the Dioxus Launcher"
+}
+
+schema {
+    @ @object{
+        /// Pack metadata
+        pack @object{
+            name @string
+            version @default("1.0.0" @string)
+            author @default("" @string)
+            description @default("" @string)
+            url @default("" @string)
+            prefix @optional(@string)
+        }
+
+        /// Tag definitions with colors and icons
+        tags @default(() @seq(@object{
+            path @string
+            name @string
+            description @default("" @string)
+            color @default("" @string)
+            icon @default("" @string)
+        }))
+
+        /// Items with multi-action workflows
+        items @default(() @seq(@Item))
+
+        /// Icon name to relative file path mappings
+        icons @default(@object{@ @string} @map(@string))
+
+        /// Magic words: keyword + Space loads a filter preset
+        magic_words @default(() @seq(@object{
+            keyword @string
+            preset @string
+        }))
+
+        /// Filter presets bundled with the pack
+        presets @default(() @seq(@object{
+            name @string
+            include @default(() @seq(@string))
+            exclude @default(() @seq(@string))
+        }))
+    }
+
+    /// Action definition for a modifier key
+    Action @object{
+        name @string
+        exec @string
+        description @default("" @string)
+        keep_open @default(false @bool)
+    }
+
+    /// Actions keyed by modifier combination
+    Actions @object{
+        enter @optional(@Action)
+        shift_enter @optional(@Action)
+        ctrl_enter @optional(@Action)
+        ctrl_shift_enter @optional(@Action)
+        alt_enter @optional(@Action)
+        alt_shift_enter @optional(@Action)
+    }
+
+    /// A workflow item with multi-action support
+    Item @object{
+        id @string
+        label @string
+        sub @default("" @string)
+        icon @default("" @string)
+        tags @default(() @seq(@string))
+        search_fields @default(() @seq(@string))
+        pinned @default(false @bool)
+        actions @default(@Actions @Actions)
+    }
+}

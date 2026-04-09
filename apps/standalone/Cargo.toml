@@ -1,0 +1,24 @@
+[package]
+name = "dioxus-launcher"
+version.workspace = true
+edition.workspace = true
+
+[features]
+default = ["desktop"]
+desktop = ["dep:dioxus", "launcher-ui/desktop"]
+native = ["dep:dioxus-native", "dep:winit", "launcher-ui/native"]
+
+[dependencies]
+launcher-core = { workspace = true }
+launcher-ui = { workspace = true, default-features = false }
+providers = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+# Desktop renderer (Wry webview)
+dioxus = { workspace = true, optional = true }
+
+# Native renderer (Blitz GPU)
+dioxus-native = { workspace = true, optional = true }
+winit = { workspace = true, optional = true }

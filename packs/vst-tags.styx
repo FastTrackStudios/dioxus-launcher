@@ -1,0 +1,23 @@
+/// VST Plugin Tags Pack
+/// Community-maintained categorization tags for popular VST plugins.
+/// Drop this file in your packs directory to get pre-defined tags.
+
+pack {
+    name "vst-tags"
+    version "1.0.0"
+    author "Community"
+    description "Pre-defined tags and categorization for popular VST plugins"
+}
+
+tags (
+    {path "audio/effects/distortion",  name "Distortion",    description "Distortion and saturation effects", color "#f38ba8"}
+    {path "audio/effects/chorus",      name "Chorus",        description "Chorus and modulation effects",     color "#74c7ec"}
+    {path "audio/effects/phaser",      name "Phaser",        description "Phaser effects",                    color "#b4befe"}
+    {path "audio/effects/filter",      name "Filter",        description "Filter effects",                    color "#cba6f7"}
+    {path "audio/effects/limiter",     name "Limiter",       description "Limiter and maximizer effects",     color "#eba0ac"}
+    {path "audio/effects/stereo",      name "Stereo",        description "Stereo width and imaging",          color "#94e2d5"}
+    {path "audio/instruments/drum-machine", name "Drum Machine", description "Drum machines and beat makers",  color "#fab387"}
+    {path "audio/instruments/organ",   name "Organ",         description "Organ instruments",                 color "#a6e3a1"}
+)
+
+// No items — this pack only provides tag definitions.

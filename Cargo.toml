@@ -1,0 +1,48 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/launcher-core",
+    "crates/launcher-ui",
+    "crates/providers",
+    "apps/standalone",
+    "apps/native-test",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+
+[workspace.dependencies]
+launcher-core = { path = "crates/launcher-core" }
+launcher-ui = { path = "crates/launcher-ui", default-features = false }
+providers = { path = "crates/providers" }
+
+# Dioxus — desktop (Wry webview)
+dioxus = { version = "0.7", features = ["desktop"] }
+
+# Dioxus — native (Blitz GPU renderer)
+dioxus-native = { git = "https://github.com/FastTrackStudios/blitz", features = ["prelude"] }
+
+# Async
+tokio = { version = "1", features = ["full"] }
+
+# Matching
+nucleo-matcher = "0.3"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+
+# Facet (reflection) + Styx (config language)
+facet = "0.44"
+facet-styx = "3.0"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Utilities
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+winit = "=0.31.0-beta.2"
