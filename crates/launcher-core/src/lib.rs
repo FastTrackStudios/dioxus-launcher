@@ -1,5 +1,7 @@
 pub mod config;
+pub mod ext_api;
 pub mod export;
+pub mod extension;
 pub mod favorites;
 pub mod filter;
 pub mod history;
@@ -15,6 +17,8 @@ pub use config::LauncherConfig;
 pub use export::ExportBundle;
 pub use favorites::Favorites;
 pub use filter::{FilterMode, FilterPresets, FilterState, MagicWords};
+pub use ext_api::ExtensionApi;
+pub use extension::{ExtensionManifest, ExtensionRegistry, LoadedExtension};
 pub use pack::{LoadedPack, PackDef};
 pub use provider::{ActionModifier, ActivationResult, Item, ItemAction, Provider, ProviderConfig};
 pub use query::{QueryEngine, QueryEngineBuilder};

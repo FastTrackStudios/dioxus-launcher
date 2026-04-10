@@ -1,0 +1,61 @@
+/// Clipboard History extension
+/// Browse and paste from clipboard history.
+
+extension {
+    name "clipboard-history"
+    title "Clipboard History"
+    version "1.0.0"
+    author "fasttrackstudios"
+    description "Browse and manage your clipboard history"
+    icon "C"
+    categories ("Productivity" "System")
+}
+
+tags (
+    {path "tools/clipboard", name "Clipboard", color "#89dceb"}
+)
+
+commands (
+    {
+        name "browse"
+        title "Clipboard History"
+        description "Browse recent clipboard entries"
+        mode "view"
+        keywords ("clipboard" "paste" "copy" "history")
+        items (
+            {
+                id "clip-paste-last"
+                title "Paste Last Copied"
+                subtitle "Paste the most recent clipboard entry"
+                icon "P"
+                tags ("tools/clipboard")
+                actions (
+                    {title "Paste", exec "sh:wl-paste", shortcut "enter"}
+                    {title "Copy Again", exec "sh:wl-paste | wl-copy", shortcut "shift+enter", keep_open true}
+                )
+            }
+            {
+                id "clip-clear"
+                title "Clear Clipboard"
+                subtitle "Clear the system clipboard"
+                icon "X"
+                tags ("tools/clipboard")
+                actions (
+                    {title "Clear", exec "sh:wl-copy ''"}
+                )
+            }
+        )
+    }
+    {
+        name "copy-text"
+        title "Copy Text"
+        description "Quick copy arbitrary text"
+        mode "no-view"
+        keywords ("copy" "text" "clipboard")
+    }
+)
+
+preferences (
+    {name "max_entries", title "Max History Entries", type "textfield", default "50", description "Maximum number of clipboard entries to remember"}
+    {name "show_preview", title "Show Preview", type "checkbox", default "true", description "Show text preview in results"}
+)

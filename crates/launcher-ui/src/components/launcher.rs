@@ -368,7 +368,11 @@ pub fn Launcher(
     };
 
     let is_full = matches!(*mode.read(), LauncherMode::Full);
-    let launcher_class = if is_full { "launcher" } else { "launcher palette-mode" };
+    let launcher_class = if is_full {
+        "flex h-screen overflow-hidden bg-ctp-base relative"
+    } else {
+        "flex h-auto max-h-[460px] overflow-hidden bg-ctp-base relative"
+    };
 
     let query_is_empty = query.read().is_empty() && filter.read().is_empty();
     let show_empty_search = result_count == 0 && !query_is_empty;
@@ -420,7 +424,8 @@ pub fn Launcher(
     };
 
     rsx! {
-        style { {stylesheet.read().clone()} }
+        // Tailwind CSS is loaded via Stylesheet in the host app (main.rs)
+        // The theme.to_stylesheet() is kept as fallback for non-Tailwind hosts
 
         div { class: "{launcher_class}",
             if is_full {
@@ -453,7 +458,7 @@ pub fn Launcher(
                 }
             }
 
-            div { class: "launcher-main",
+            div { class: "flex-1 flex flex-col min-w-0 overflow-hidden",
                 SearchBar {
                     value: query(),
                     on_input: on_input,
@@ -508,25 +513,25 @@ pub fn Launcher(
                     },
                 }
 
-                div { class: "results",
+                div { class: "flex-1 overflow-y-auto px-2 py-1",
                     if show_empty_search {
-                        div { class: "empty-state",
-                            div { class: "empty-icon", "\u{1F50D}" }
-                            div { class: "empty-text", "No results found" }
-                            div { class: "empty-hint", "Try a different search or clear filters" }
+                        div { class: "flex flex-col items-center justify-center py-12 px-6 text-ctp-overlay0 gap-2",
+                            div { class: "text-4xl opacity-40", "\u{1F50D}" }
+                            div { class: "text-sm", "No results found" }
+                            div { class: "text-xs opacity-60", "Try a different search or clear filters" }
                         }
                     }
                     if show_empty_idle {
-                        div { class: "empty-state",
-                            div { class: "empty-icon", "\u{2315}" }
-                            div { class: "empty-text", "Start typing to search" }
-                            div { class: "empty-hint",
+                        div { class: "flex flex-col items-center justify-center py-12 px-6 text-ctp-overlay0 gap-2",
+                            div { class: "text-4xl opacity-40", "\u{2315}" }
+                            div { class: "text-sm", "Start typing to search" }
+                            div { class: "text-xs opacity-60",
                                 "Tab: search modes \u{00B7} Ctrl+F: fav \u{00B7} Ctrl+Shift+1-5: rate \u{00B7} Ctrl+H: hide \u{00B7} Ctrl+R: random \u{00B7} Ctrl+L: clear"
                             }
                         }
                     }
                     if show_recent_header {
-                        div { class: "result-section", "Recent & Favorites" }
+                        div { class: "px-3 pt-2 pb-1 text-[11px] font-semibold text-ctp-overlay0 uppercase tracking-wider", "Recent & Favorites" }
                     }
 
                     for item in display_items {

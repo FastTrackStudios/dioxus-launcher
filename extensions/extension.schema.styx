@@ -1,0 +1,105 @@
+/// Schema for Dioxus Launcher extensions.
+/// Extensions register commands, preferences, and UI with the launcher.
+
+meta {
+    id "https://github.com/FastTrackStudios/dioxus-launcher/extension"
+    version "1.0.0"
+    description "Extension manifest schema"
+}
+
+schema {
+    @ @object{
+        /// Extension metadata
+        extension @object{
+            name @string
+            title @string
+            version @default("1.0.0" @string)
+            author @default("" @string)
+            description @default("" @string)
+            icon @default("" @string)
+            url @default("" @string)
+            categories @default(() @seq(@string))
+        }
+
+        /// Commands registered by this extension
+        commands @default(() @seq(@Command))
+
+        /// Extension-level preferences
+        preferences @default(() @seq(@Preference))
+
+        /// Tag definitions
+        tags @default(() @seq(@object{
+            path @string
+            name @string
+            color @default("" @string)
+        }))
+
+        /// Icon name to file path mappings
+        icons @default(@object{@ @string} @map(@string))
+    }
+
+    /// A command
+    Command @object{
+        name @string
+        title @string
+        description @default("" @string)
+        /// "view", "no-view", or "background"
+        mode @default("no-view" @string)
+        icon @default("" @string)
+        keywords @default(() @seq(@string))
+        exec @default("" @string)
+        /// Background interval: "30s", "5m", "1h"
+        interval @default("" @string)
+        preferences @default(() @seq(@Preference))
+        arguments @default(() @seq(@Argument))
+        actions @default(() @seq(@Action))
+        items @default(() @seq(@CommandItem))
+    }
+
+    /// A preference field
+    Preference @object{
+        name @string
+        title @string
+        description @default("" @string)
+        /// "textfield", "password", "checkbox", "dropdown", "file", "directory"
+        type @default("textfield" @string)
+        required @default(false @bool)
+        default @default("" @string)
+        options @default(() @seq(@object{title @string, value @string}))
+    }
+
+    /// An inline argument
+    Argument @object{
+        name @string
+        placeholder @string
+        required @default(false @bool)
+        type @default("text" @string)
+    }
+
+    /// An action on a command or item
+    Action @object{
+        title @string
+        name @default("" @string)
+        exec @default("" @string)
+        shortcut @default("" @string)
+        icon @default("" @string)
+        keep_open @default(false @bool)
+    }
+
+    /// A static item within a command
+    CommandItem @object{
+        id @string
+        title @string
+        subtitle @default("" @string)
+        icon @default("" @string)
+        keywords @default(() @seq(@string))
+        tags @default(() @seq(@string))
+        actions @default(() @seq(@Action))
+        accessories @default(() @seq(@object{
+            text @default("" @string)
+            icon @default("" @string)
+            tag @default("" @string)
+            color @default("" @string)
+        }))
+    }
+}

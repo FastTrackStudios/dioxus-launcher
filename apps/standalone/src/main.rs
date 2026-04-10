@@ -7,7 +7,7 @@ use launcher_core::QueryEngine;
 use launcher_ui::components::Launcher;
 use launcher_ui::state::LauncherState;
 use launcher_ui::theme::Theme;
-use providers::{ApplicationsProvider, CalcProvider, DemoProvider, WorkflowProvider};
+use providers::{ApplicationsProvider, CalcProvider, DemoProvider, ExtensionProvider, WorkflowProvider};
 
 fn build_engine() -> QueryEngine {
     // Load workflow packs from bundled + user directories
@@ -25,6 +25,16 @@ fn build_engine() -> QueryEngine {
     loaded_packs.extend(launcher_core::pack::scan_packs(&user_dir));
 
     tracing::info!(packs = loaded_packs.len(), "Loaded workflow packs");
+
+    // Load extensions
+    let mut ext_registry = launcher_core::ExtensionRegistry::new();
+    let bundled_ext_dir = std::path::PathBuf::from(
+        std::env::var("DIOXUS_LAUNCHER_EXTENSIONS").unwrap_or_else(|_| "extensions".into())
+    );
+    ext_registry.scan_dir(&bundled_ext_dir);
+    let user_ext_dir = launcher_core::extension::default_extensions_dir();
+    ext_registry.scan_dir(&user_ext_dir);
+    tracing::info!(extensions = ext_registry.extensions().len(), "Loaded extensions");
 
     let engine = QueryEngine::builder()
         .max_results(50)
@@ -83,12 +93,17 @@ fn build_engine() -> QueryEngine {
         .magic_word("A", "Actions")
         // Create workflow provider from packs (extracts items)
         .register_packs(&loaded_packs)
+        .register_tags(|tags| {
+            // Register extension tags
+            ext_registry.register_tags(tags);
+        })
         .provider(Box::new(DemoProvider::new()))
         .provider(Box::new(ApplicationsProvider::new()))
         .provider(Box::new(CalcProvider::new()))
         .provider(Box::new(WorkflowProvider::from_items(
             loaded_packs.iter().flat_map(|p| p.to_items()).collect()
         )))
+        .provider(Box::new(ExtensionProvider::from_registry(&ext_registry)))
         .build();
     // Register presets from packs
     for pack in &loaded_packs {
@@ -139,6 +154,8 @@ fn app() -> Element {
     let on_close = |_: ()| close_window();
 
     rsx! {
+        // Load Tailwind CSS
+        Stylesheet { href: asset!("/assets/tailwind.css") }
         Launcher { state, theme: Theme::dark(), on_close: on_close }
     }
 }

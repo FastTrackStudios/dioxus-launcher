@@ -3,7 +3,6 @@ use crate::prelude::*;
 #[derive(Clone, PartialEq)]
 pub struct ActionInfo {
     pub name: String,
-    /// Modifier label for the keyboard shortcut (e.g. "⏎", "⇧⏎", "^⏎").
     pub modifier_label: String,
 }
 
@@ -18,32 +17,33 @@ pub fn ActionBar(
     let counter = format!("{}/{}", selected_index + 1, result_count);
 
     rsx! {
-        div { class: "action-bar",
-            div { class: "action-bar-left",
+        div { class: "flex items-center px-4 py-1 border-t border-ctp-surface1 h-9 bg-ctp-mantle gap-4 shrink-0",
+            div { class: "flex items-center gap-2 flex-1 min-w-0",
                 for action in &actions {
-                    span { class: "action-btn",
-                        span { class: "action-kbd", "{action.modifier_label}" }
+                    span { class: "flex items-center gap-0.5 text-[11px] text-ctp-overlay0",
+                        span { class: "font-mono text-[11px] px-1 py-px bg-ctp-surface0 border border-ctp-surface1 rounded text-ctp-overlay0",
+                            "{action.modifier_label}"
+                        }
                         " {action.name}"
                     }
                 }
             }
 
-            div { class: "action-bar-right",
+            div { class: "flex items-center gap-1.5 shrink-0",
                 if has_results {
-                    span { class: "action-btn", "{counter}" }
-                    span { class: "action-divider" }
+                    span { class: "text-[11px] text-ctp-overlay0", "{counter}" }
+                    span { class: "w-px h-4 bg-ctp-surface1" }
                 }
-
-                span { class: "action-btn",
-                    span { class: "action-kbd", "\u{2191}\u{2193}" }
+                span { class: "text-[11px] text-ctp-overlay0",
+                    span { class: "font-mono px-1 py-px bg-ctp-surface0 border border-ctp-surface1 rounded mr-0.5", "\u{2191}\u{2193}" }
                     " nav"
                 }
-                span { class: "action-btn",
-                    span { class: "action-kbd", "Esc" }
+                span { class: "text-[11px] text-ctp-overlay0",
+                    span { class: "font-mono px-1 py-px bg-ctp-surface0 border border-ctp-surface1 rounded mr-0.5", "Esc" }
                     " clear"
                 }
-                span { class: "action-btn",
-                    span { class: "action-kbd", "Tab" }
+                span { class: "text-[11px] text-ctp-overlay0",
+                    span { class: "font-mono px-1 py-px bg-ctp-surface0 border border-ctp-surface1 rounded mr-0.5", "Tab" }
                     " {mode_label}"
                 }
             }

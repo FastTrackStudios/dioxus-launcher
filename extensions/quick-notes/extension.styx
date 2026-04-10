@@ -1,0 +1,65 @@
+/// Quick Notes extension
+/// Create and search plain text notes from the launcher.
+
+extension {
+    name "quick-notes"
+    title "Quick Notes"
+    version "1.0.0"
+    author "fasttrackstudios"
+    description "Create and manage quick notes without leaving the launcher"
+    icon "N"
+    categories ("Productivity")
+}
+
+tags (
+    {path "tools/notes", name "Notes", color "#f9e2af"}
+)
+
+commands (
+    {
+        name "search"
+        title "Search Notes"
+        description "Find notes by content"
+        mode "view"
+        keywords ("notes" "search" "find" "text" "memo")
+        items (
+            {
+                id "note-new"
+                title "Create New Note"
+                subtitle "Write a quick note"
+                icon "+"
+                tags ("tools/notes")
+                keywords ("new" "create" "add" "write")
+                actions (
+                    {title "Create", exec "ext:quick-notes:create"}
+                    {title "Create & Pin", exec "ext:quick-notes:create-pinned", shortcut "shift+enter"}
+                )
+            }
+        )
+    }
+    {
+        name "create"
+        title "New Note"
+        description "Create a quick note"
+        mode "no-view"
+        keywords ("note" "new" "create" "write")
+    }
+    {
+        name "create-pinned"
+        title "New Pinned Note"
+        description "Create a pinned note that stays at the top"
+        mode "no-view"
+    }
+    {
+        name "daily"
+        title "Daily Note"
+        description "Open or create today's note"
+        mode "view"
+        keywords ("daily" "today" "journal" "diary")
+    }
+)
+
+preferences (
+    {name "notes_dir", title "Notes Directory", type "directory", default "~/Notes", description "Where to store notes"}
+    {name "default_format", title "Default Format", type "dropdown", default "markdown", description "Default note format", options ({title "Markdown", value "markdown"} {title "Plain Text", value "text"})}
+)

@@ -10,16 +10,11 @@ pub struct ChipItem {
     pub color: String,
 }
 
-/// What kind of filter action was requested.
 #[derive(Clone, PartialEq, Debug)]
 pub enum FilterAction {
-    /// Clear all filters.
     Clear,
-    /// Toggle include (click).
     ToggleInclude(String),
-    /// Toggle exclude (Alt+click or Shift+click).
     ToggleExclude(String),
-    /// Remove from all filter lists (Ctrl+click).
     Remove(String),
 }
 
@@ -34,10 +29,10 @@ pub fn FilterChips(
     }
 
     rsx! {
-        div { class: "filter-chips",
+        div { class: "flex gap-1 px-4 py-1 border-b border-ctp-surface1 overflow-x-auto shrink-0 bg-ctp-base",
             if has_active {
                 span {
-                    class: "filter-chip",
+                    class: "flex items-center gap-0.5 px-2.5 py-0.5 rounded-full bg-ctp-surface0 text-ctp-subtext0 text-[11px] cursor-pointer hover:bg-ctp-surface1 whitespace-nowrap",
                     onclick: move |_| on_action.call(FilterAction::Clear),
                     "\u{2715} Clear"
                 }
@@ -45,20 +40,13 @@ pub fn FilterChips(
 
             for chip in &chips {
                 {
+                    let base = "flex items-center gap-0.5 px-2.5 py-0.5 rounded-full text-[11px] cursor-pointer whitespace-nowrap border";
                     let class = if chip.is_active {
-                        "filter-chip active"
+                        format!("{base} bg-ctp-blue text-ctp-base border-ctp-blue")
                     } else if chip.is_excluded {
-                        "filter-chip excluded"
+                        format!("{base} bg-ctp-red text-ctp-base border-ctp-red opacity-85")
                     } else {
-                        "filter-chip"
-                    };
-
-                    let style = if !chip.color.is_empty() && (chip.is_active || chip.is_excluded) {
-                        format!("border-color: {}; color: {};", chip.color, chip.color)
-                    } else if !chip.color.is_empty() {
-                        format!("border-color: {}33;", chip.color)
-                    } else {
-                        String::new()
+                        format!("{base} bg-ctp-surface0 text-ctp-subtext0 border-transparent hover:bg-ctp-surface1 hover:text-ctp-text")
                     };
 
                     let prefix = if chip.is_excluded { "-" } else if chip.is_active { "+" } else { "" };
@@ -71,24 +59,16 @@ pub fn FilterChips(
                     rsx! {
                         span {
                             class: "{class}",
-                            style: "{style}",
                             onclick: move |evt: MouseEvent| {
                                 let mods = evt.modifiers();
                                 if mods.ctrl() {
-                                    // Ctrl+click: remove from all
                                     on_action.call(FilterAction::Remove(id_rem.clone()));
                                 } else if mods.alt() || mods.shift() {
-                                    // Alt+click or Shift+click: toggle exclude
                                     on_action.call(FilterAction::ToggleExclude(id_exc.clone()));
+                                } else if is_active || is_excluded {
+                                    on_action.call(FilterAction::Remove(id_inc.clone()));
                                 } else {
-                                    // Plain click: toggle include (or clear if already active)
-                                    if is_active {
-                                        on_action.call(FilterAction::Remove(id_inc.clone()));
-                                    } else if is_excluded {
-                                        on_action.call(FilterAction::Remove(id_inc.clone()));
-                                    } else {
-                                        on_action.call(FilterAction::ToggleInclude(id_inc.clone()));
-                                    }
+                                    on_action.call(FilterAction::ToggleInclude(id_inc.clone()));
                                 }
                             },
                             "{prefix}{chip.label}"
